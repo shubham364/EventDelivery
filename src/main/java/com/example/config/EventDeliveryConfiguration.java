@@ -10,6 +10,10 @@ public class EventDeliveryConfiguration extends Configuration {
     @NotNull
     private final int defaultSize;
 
+    @NotNull
+    @JsonProperty("mongoConfig")
+    private MongoDBConfiguration mongoDBConfiguration;
+
     @JsonCreator
     public EventDeliveryConfiguration(@JsonProperty("defaultSize") final int defaultSize) {
         this.defaultSize = defaultSize;
@@ -19,4 +23,11 @@ public class EventDeliveryConfiguration extends Configuration {
         return defaultSize;
     }
 
+    public MongoDBConfiguration getMongoDBConfiguration() {
+        return mongoDBConfiguration;
+    }
+
+    public void setMongoDBConfiguration(MongoDBConfiguration mongoDBConfiguration) {
+        this.mongoDBConfiguration = mongoDBConfiguration;
+    }
 }
