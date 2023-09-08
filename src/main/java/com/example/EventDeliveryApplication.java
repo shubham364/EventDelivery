@@ -1,9 +1,11 @@
 package com.example;
 
 import com.example.config.EventDeliveryConfiguration;
+import com.example.config.MongoDBConfiguration;
 import com.example.resource.EventResource;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 import io.dropwizard.Application;
-import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -13,16 +15,18 @@ public class EventDeliveryApplication extends Application<EventDeliveryConfigura
         new EventDeliveryApplication().run(args);
     }
 
-    @Override
-    public void run(EventDeliveryConfiguration configuration, Environment environment) throws Exception {
-        final int defaultSize = configuration.getDefaultSize();
-        System.out.println(defaultSize);
-        environment.jersey().register(new EventResource());
+    public void run(EventDeliveryConfiguration config, Environment env)
+            throws Exception {
+        MongoDBConfiguration mongoDBConfiguration = config.getMongoDBConfiguration();
+        MongoClient mongoClient = new MongoClient(mongoDBConfiguration.getMongoHost(), mongoDBConfiguration.getMongoPort());
+        MongoManaged mongoManaged = new MongoManaged(mongoClient);
+        env.lifecycle().manage(mongoManaged);
+        MongoDatabase db = mongoClient.getDatabase(mongoDBConfiguration.getMongoDB());
+        env.jersey().register(new EventResource(db));
     }
 
     @Override
     public void initialize(final Bootstrap<EventDeliveryConfiguration> bootstrap) {
-        bootstrap.setConfigurationSourceProvider(new ResourceConfigurationSourceProvider());
         super.initialize(bootstrap);
     }
 }
