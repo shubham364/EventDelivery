@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class MongoDBConfiguration {
+
     @JsonProperty
     @NotEmpty
     public String mongoHost;

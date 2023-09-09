@@ -1,5 +1,6 @@
 package com.example.dao;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
@@ -7,6 +8,7 @@ import org.bson.Document;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.model.Constants.ID;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Sorts.descending;
 
@@ -34,6 +36,13 @@ public class MongoDAO {
                 gt(key, greaterThanValue))).sort(new Document(key, sortOrder));
         iterable.into(documents);
         return documents;
+    }
+
+    public Document update(MongoCollection<Document> collection, String id, Document document){
+        BasicDBObject dbObject = new BasicDBObject();
+        dbObject.put(ID, id);
+        collection.replaceOne(dbObject, document);
+        return document;
     }
 
     public Document getLatestDoc(MongoCollection<Document> collection){

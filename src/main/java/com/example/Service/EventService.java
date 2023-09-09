@@ -1,18 +1,25 @@
 package com.example.Service;
 
 import com.example.dao.MongoDAO;
+import com.example.model.Constants;
 import com.example.model.Event;
 import com.example.request.EventRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoDatabase;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.bson.Document;
+
+import java.util.List;
 
 public class EventService {
 
     private final MongoDatabase mongoDatabase;
+
     private final ObjectMapper objectMapper;
+
     private final MongoDAO mongoDAO;
+
     private static Integer ID = 0;
 
     public EventService(MongoDatabase mongoDatabase) {
@@ -44,6 +51,15 @@ public class EventService {
         }
         ID += 1;
         return ID.toString();
+    }
+
+    public Event getEventById(String id, String topicName){
+        List<Document> documents = mongoDAO.findByKey(mongoDatabase.getCollection(topicName), Constants.ID, id);
+        if(CollectionUtils.isNotEmpty(documents)){
+            Document document = documents.get(0);
+            return objectMapper.convertValue(document, Event.class);
+        }
+        return null;
     }
 
     public void createCollection(String collectionName){

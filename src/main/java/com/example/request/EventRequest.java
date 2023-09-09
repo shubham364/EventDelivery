@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 public class EventRequest {
 
     private String userId;
+
     private String payload;
 
     public String getUserId() {

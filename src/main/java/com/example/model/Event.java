@@ -6,7 +6,9 @@ public class Event {
 
     @JsonProperty("_id")
     private String id;
+
     private String userId;
+
     private String payload;
 
     public String getId() {
