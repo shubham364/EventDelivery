@@ -1,9 +1,12 @@
 package com.example.resource;
 
 import com.example.Service.EventService;
+import com.example.dao.InitialiseObservers;
 import com.example.model.Event;
 import com.example.request.EventRequest;
 import com.google.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -11,6 +14,8 @@ import javax.ws.rs.core.Response;
 
 @Path("/event")
 public class EventResource {
+
+    private final static Logger logger = LoggerFactory.getLogger(EventResource.class);
 
     @Inject
     private EventService eventService;

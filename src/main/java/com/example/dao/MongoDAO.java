@@ -1,9 +1,12 @@
 package com.example.dao;
 
+import com.example.Service.EventService;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,8 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Sorts.descending;
 
 public class MongoDAO {
+
+    private final static Logger logger = LoggerFactory.getLogger(MongoDAO.class);
 
     public void insertOne(MongoCollection<Document> collection, Document document) {
         collection.insertOne(document);

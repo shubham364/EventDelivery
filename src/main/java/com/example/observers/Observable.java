@@ -1,9 +1,15 @@
 package com.example.observers;
 
+import com.example.Service.ConsumerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Observable {
+
+    private final static Logger logger = LoggerFactory.getLogger(Observable.class);
 
     private static List<IObserver> observers;
 

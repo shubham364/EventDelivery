@@ -8,8 +8,12 @@ import com.example.observers.DummyEventProcessing;
 import com.example.observers.IObserver;
 import com.google.inject.Inject;
 import com.mongodb.client.MongoDatabase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Observer implements IObserver {
+
+    private final static Logger logger = LoggerFactory.getLogger(Observer.class);
 
     private final Consumers consumer;
 

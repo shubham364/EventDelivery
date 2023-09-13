@@ -9,10 +9,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.example.model.Constants.*;
 
 public class ConsumerService {
+
+    private final static Logger logger = LoggerFactory.getLogger(ConsumerService.class);
 
     @Inject
     private MongoDatabase mongoDatabase;

@@ -1,9 +1,12 @@
 package com.example.resource;
 
 import com.example.Service.ConsumerService;
+import com.example.Service.EventService;
 import com.example.model.Consumers;
 import com.example.request.CreateConsumerRequest;
 import com.google.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -11,6 +14,8 @@ import javax.ws.rs.core.Response;
 
 @Path("/consumer")
 public class ConsumerResource {
+
+    private final static Logger logger = LoggerFactory.getLogger(ConsumerResource.class);
 
     @Inject
     private ConsumerService consumerService;

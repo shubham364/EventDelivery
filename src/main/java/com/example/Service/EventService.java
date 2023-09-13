@@ -10,10 +10,14 @@ import com.mongodb.client.MongoDatabase;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class EventService {
+
+    private final static Logger logger = LoggerFactory.getLogger(EventService.class);
 
     @Inject
     private MongoDatabase mongoDatabase;

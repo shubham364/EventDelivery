@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -15,6 +17,8 @@ import java.util.concurrent.Callable;
 import static com.example.model.Constants.CONSUMER_COLLECTION_NAME;
 
 public class DummyEventProcessing implements Callable {
+
+    private final static Logger logger = LoggerFactory.getLogger(DummyEventProcessing.class);
 
     private final Event event;
 

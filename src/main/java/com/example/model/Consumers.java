@@ -54,4 +54,15 @@ public class Consumers {
     public void setCurrRetry(int currRetry) {
         this.currRetry = currRetry;
     }
+
+    @Override
+    public String toString() {
+        return "Consumers{" +
+                "consumerId='" + consumerId + '\'' +
+                ", topicName='" + topicName + '\'' +
+                ", cursor='" + cursor + '\'' +
+                ", maxRetry=" + maxRetry +
+                ", currRetry=" + currRetry +
+                '}';
+    }
 }
