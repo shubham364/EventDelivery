@@ -5,6 +5,7 @@ import com.example.dao.MongoDAO;
 import com.example.model.Consumers;
 import com.example.model.Event;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
@@ -27,6 +28,7 @@ public class DummyEventProcessing implements Callable {
 
     private final Consumers consumer;
 
+    @Inject
     public DummyEventProcessing(Event event, EventService eventService, MongoDatabase mongoDatabase, MongoDAO mongoDAO, Consumers consumer) {
         this.event = event;
         this.eventService = eventService;
@@ -50,7 +52,7 @@ public class DummyEventProcessing implements Callable {
         Random rand = new Random(10000);
         int random = rand.nextInt();
         try {
-            // sleeping for a random time between [0, 10) seconds.
+            // sleeping for a random time between [0, 10) seconds mocking event processing.
             Thread.sleep(random);
         } catch (Exception ex){
             System.out.println(ex.getMessage());

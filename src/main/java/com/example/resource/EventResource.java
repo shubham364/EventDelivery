@@ -3,7 +3,7 @@ package com.example.resource;
 import com.example.Service.EventService;
 import com.example.model.Event;
 import com.example.request.EventRequest;
-import com.mongodb.client.MongoDatabase;
+import com.google.inject.Inject;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,11 +12,10 @@ import javax.ws.rs.core.Response;
 @Path("/event")
 public class EventResource {
 
-    private final EventService eventService;
+    @Inject
+    private EventService eventService;
 
-    public EventResource(MongoDatabase mongoDatabase) {
-        eventService = new EventService(mongoDatabase);
-    }
+    public EventResource() {}
 
     @Path("/path_param/{name}")
     @GET

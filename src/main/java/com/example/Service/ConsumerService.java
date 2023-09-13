@@ -6,6 +6,7 @@ import com.example.observers.Observable;
 import com.example.observers.impl.Observer;
 import com.example.request.CreateConsumerRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
@@ -13,23 +14,22 @@ import static com.example.model.Constants.*;
 
 public class ConsumerService {
 
-    private final MongoDatabase mongoDatabase;
+    @Inject
+    private MongoDatabase mongoDatabase;
 
-    private final ObjectMapper objectMapper;
+    @Inject
+    private ObjectMapper objectMapper;
 
-    private final MongoDAO mongoDAO;
+    @Inject
+    private MongoDAO mongoDAO;
 
-    private final EventService eventService;
+    @Inject
+    private EventService eventService;
 
-    private final Observable observable;
+    @Inject
+    private Observable observable;
 
-    public ConsumerService(MongoDatabase mongoDatabase, Observable observable, EventService eventService) {
-        this.mongoDatabase = mongoDatabase;
-        objectMapper = new ObjectMapper();
-        mongoDAO = new MongoDAO();
-        this.eventService = eventService;
-        this.observable = observable;
-    }
+    public ConsumerService() {}
 
     public Consumers createConsumer(CreateConsumerRequest request){
         Consumers consumer = getConsumersPojo(request);

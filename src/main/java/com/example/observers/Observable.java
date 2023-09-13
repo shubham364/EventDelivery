@@ -1,10 +1,11 @@
 package com.example.observers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Observable {
 
-    private List<IObserver> observers;
+    private static List<IObserver> observers;
 
     private static Observable observable = null;
 
@@ -18,6 +19,9 @@ public class Observable {
     }
 
     public void subscribe(IObserver observer){
+        if(observers == null){
+            observers = new ArrayList<>();
+        }
         observers.add(observer);
     }
 

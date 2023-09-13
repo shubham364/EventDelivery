@@ -6,6 +6,7 @@ import com.example.model.Consumers;
 import com.example.model.Event;
 import com.example.observers.DummyEventProcessing;
 import com.example.observers.IObserver;
+import com.google.inject.Inject;
 import com.mongodb.client.MongoDatabase;
 
 public class Observer implements IObserver {
@@ -20,6 +21,7 @@ public class Observer implements IObserver {
 
     private boolean eventBeingProcessed;
 
+    @Inject
     public Observer(Consumers consumer, EventService eventService, MongoDatabase mongoDatabase, MongoDAO mongoDAO) {
         this.consumer = consumer;
         this.eventService = eventService;
@@ -50,5 +52,6 @@ public class Observer implements IObserver {
             return;
         Thread thread = new Thread(() -> new DummyEventProcessing(event, eventService, mongoDatabase, mongoDAO, consumer));
         thread.start();
+        eventBeingProcessed = false;
     }
 }

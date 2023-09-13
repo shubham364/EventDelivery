@@ -5,6 +5,7 @@ import com.example.model.Constants;
 import com.example.model.Event;
 import com.example.request.EventRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 import com.mongodb.client.MongoDatabase;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -14,19 +15,18 @@ import java.util.List;
 
 public class EventService {
 
-    private final MongoDatabase mongoDatabase;
+    @Inject
+    private MongoDatabase mongoDatabase;
 
-    private final ObjectMapper objectMapper;
+    @Inject
+    private ObjectMapper objectMapper;
 
-    private final MongoDAO mongoDAO;
+    @Inject
+    private MongoDAO mongoDAO;
 
     private static Integer ID = 0;
 
-    public EventService(MongoDatabase mongoDatabase) {
-        this.mongoDatabase = mongoDatabase;
-        objectMapper = new ObjectMapper();
-        mongoDAO = new MongoDAO();
-    }
+    public EventService() {}
 
     public Event insertOne(EventRequest eventRequest, String collectionName){
         Event event = getEventPojo(eventRequest, collectionName);
