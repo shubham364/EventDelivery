@@ -38,6 +38,7 @@ public class ConsumerService {
     public Consumers createConsumer(CreateConsumerRequest request){
         Consumers consumer = getConsumersPojo(request);
         Document document = objectMapper.convertValue(consumer, Document.class);
+        logger.info("Adding a new Consumer. {}", consumer);
         mongoDAO.insertOne(mongoDatabase.getCollection(CONSUMER_COLLECTION_NAME), document);
         createObserver(consumer);
         return consumer;

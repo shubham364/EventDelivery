@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.config.EventDeliveryConfiguration;
 import com.example.dao.InitialiseObservers;
+import com.example.exception.EventDeliveryExceptionMapper;
 import com.example.guice.GuiceModule;
 import com.example.resource.ConsumerResource;
 import com.example.resource.EventResource;
@@ -21,6 +22,7 @@ public class EventDeliveryApplication extends Application<EventDeliveryConfigura
         Injector injector = Guice.createInjector(new GuiceModule(config));
         InitialiseObservers initialiseObservers = injector.getInstance(InitialiseObservers.class);
         initialiseObservers.initialiseAllObserversOnStartUp();
+        env.jersey().register(injector.getInstance(EventDeliveryExceptionMapper.class));
         env.jersey().register(injector.getInstance(EventResource.class));
         env.jersey().register(injector.getInstance(ConsumerResource.class));
     }

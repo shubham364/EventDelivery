@@ -1,7 +1,6 @@
 package com.example.resource;
 
 import com.example.Service.ConsumerService;
-import com.example.Service.EventService;
 import com.example.model.Consumers;
 import com.example.request.CreateConsumerRequest;
 import com.google.inject.Inject;
