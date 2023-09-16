@@ -1,6 +1,5 @@
 package com.example.observers;
 
-import com.example.Service.ConsumerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +35,8 @@ public class Observable {
     }
 
     public synchronized void notifyObservers(String eventId, String topicName){
+        if(observers == null)
+            return;
         for (IObserver observer : observers){
             if(!observer.isProcessingEvent() && observer.getSubscribedTopicName().equalsIgnoreCase(topicName)){
                 observer.relayEvent(eventId);

@@ -3,6 +3,7 @@ package com.example.resource;
 import com.example.Service.ConsumerService;
 import com.example.exception.EventDeliveryException;
 import com.example.model.Consumers;
+import com.example.model.enums.TraceId;
 import com.example.request.CreateConsumerRequest;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ public class ConsumerResource {
 
     @Path("/get/{consumer_name}")
     @GET
+    @TraceId
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getConsumer(@PathParam(value = "consumer_name") String consumerName) throws EventDeliveryException {
@@ -33,6 +35,7 @@ public class ConsumerResource {
 
     @Path("/create")
     @POST
+    @TraceId
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createConsumer(CreateConsumerRequest request) {

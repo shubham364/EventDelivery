@@ -1,11 +1,16 @@
 package com.example.guice;
 
+import com.example.Service.interceptor.LoggingMethodInterceptor;
 import com.example.config.EventDeliveryConfiguration;
 import com.example.config.MongoDBConfiguration;
+import com.example.model.enums.TraceId;
 import com.example.observers.Observable;
 import com.google.inject.AbstractModule;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
+
+import static com.google.inject.matcher.Matchers.annotatedWith;
+import static com.google.inject.matcher.Matchers.any;
 
 public class GuiceModule extends AbstractModule {
 
@@ -21,6 +26,8 @@ public class GuiceModule extends AbstractModule {
         bind(MongoDatabase.class).toInstance(mongoDatabase);
         Observable observable = Observable.getObservable();
         bind(Observable.class).toInstance(observable);
+        LoggingMethodInterceptor loggingMethodInterceptor = new LoggingMethodInterceptor();
+        bindInterceptor(any(), annotatedWith(TraceId.class), loggingMethodInterceptor);
     }
 
     private MongoDatabase getMongoDatabase(){

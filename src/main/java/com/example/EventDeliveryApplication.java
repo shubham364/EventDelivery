@@ -28,6 +28,10 @@ public class EventDeliveryApplication extends Application<EventDeliveryConfigura
     }
 
     @Override
+    protected void bootstrapLogging() {
+    }
+
+    @Override
     public void initialize(final Bootstrap<EventDeliveryConfiguration> bootstrap) {
         super.initialize(bootstrap);
     }

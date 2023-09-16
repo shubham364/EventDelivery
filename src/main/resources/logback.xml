@@ -4,7 +4,7 @@
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
-            <pattern>%yellow([%date]) %highlight([%-5level]) %boldMagenta([%thread]) %blue([%logger{10}.%method:%L]) %msg %replace(%xException){'\n','\u2028'}%nopex%n</pattern>
+            <pattern>%yellow([%date]) %highlight([%-5level]) %green([%X{x-trace-id}]) %boldMagenta([%thread]) %blue([%logger{10}.%method:%L]) %msg %replace(%xException){'\n','\u2028'}%nopex%n</pattern>
         </encoder>
     </appender>
 
