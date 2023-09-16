@@ -31,6 +31,10 @@ public class Observable {
         observers.add(observer);
     }
 
+    public void restartEventProcessing(IObserver observer){
+        observer.restartEventProcessing();
+    }
+
     public synchronized void notifyObservers(String eventId, String topicName){
         for (IObserver observer : observers){
             if(!observer.isProcessingEvent() && observer.getSubscribedTopicName().equalsIgnoreCase(topicName)){

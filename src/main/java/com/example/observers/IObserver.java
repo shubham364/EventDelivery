@@ -8,4 +8,6 @@ public interface IObserver {
 
     void relayEvent(String eventId);
 
+    void restartEventProcessing();
+
 }

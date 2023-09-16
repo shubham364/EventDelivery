@@ -1,6 +1,7 @@
 package com.example.resource;
 
 import com.example.Service.ConsumerService;
+import com.example.exception.EventDeliveryException;
 import com.example.model.Consumers;
 import com.example.request.CreateConsumerRequest;
 import com.google.inject.Inject;
@@ -21,8 +22,17 @@ public class ConsumerResource {
 
     public ConsumerResource() {}
 
-    @Path("/create")
+    @Path("/get/{consumer_name}")
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getConsumer(@PathParam(value = "consumer_name") String consumerName) throws EventDeliveryException {
+        Consumers consumer = consumerService.getConsumer(consumerName);
+        return Response.ok(consumer).build();
+    }
+
+    @Path("/create")
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createConsumer(CreateConsumerRequest request) {

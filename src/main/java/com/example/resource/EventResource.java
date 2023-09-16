@@ -1,7 +1,7 @@
 package com.example.resource;
 
 import com.example.Service.EventService;
-import com.example.dao.InitialiseObservers;
+import com.example.exception.EventDeliveryException;
 import com.example.model.Event;
 import com.example.request.EventRequest;
 import com.google.inject.Inject;
@@ -22,16 +22,12 @@ public class EventResource {
 
     public EventResource() {}
 
-    @Path("/path_param/{name}")
+    @Path("/get/{topic_name}/{user_id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getTailoredGreetingPathParam(
-            @PathParam(value = "name") String name) {
-        EventRequest event = new EventRequest();
-        event.setPayload(name);
-        event.setUserId("1");
-        eventService.insertOne(event, "topics");
+    public Response getEvent(@PathParam(value = "topic_name") String topicName, @PathParam(value = "event_id") String userId) throws EventDeliveryException {
+        Event event = eventService.getEvent(topicName, "topics");
         return Response.ok(event).build();
     }
 

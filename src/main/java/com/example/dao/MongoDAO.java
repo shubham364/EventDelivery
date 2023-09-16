@@ -1,6 +1,5 @@
 package com.example.dao;
 
-import com.example.Service.EventService;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;

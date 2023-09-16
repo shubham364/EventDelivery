@@ -50,6 +50,12 @@ public class Observer implements IObserver {
         startProcessingEvent(eventId);
     }
 
+    @Override
+    public void restartEventProcessing() {
+        eventBeingProcessed = true;
+        startProcessingEvent(consumer.getCursor());
+    }
+
     private void startProcessingEvent(String eventId){
         Event event = eventService.getEventById(eventId, consumer.getTopicName());
         if(event == null)

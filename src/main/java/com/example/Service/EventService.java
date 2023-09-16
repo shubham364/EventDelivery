@@ -1,11 +1,14 @@
 package com.example.Service;
 
 import com.example.dao.MongoDAO;
+import com.example.exception.EventDeliveryException;
 import com.example.model.Constants;
 import com.example.model.Event;
+import com.example.observers.Observable;
 import com.example.request.EventRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -13,7 +16,10 @@ import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.core.Response;
 import java.util.List;
+
+import static com.example.model.Constants.USER_ID;
 
 public class EventService {
 
@@ -28,14 +34,32 @@ public class EventService {
     @Inject
     private MongoDAO mongoDAO;
 
+    @Inject
+    private Observable observable;
+
     private static Integer ID = 0;
 
     public EventService() {}
+
+    public Event getEvent(String topicName, String userId) throws EventDeliveryException {
+        MongoCollection<Document> collection = mongoDatabase.getCollection(topicName);
+        if(collection == null){
+            logger.error("Topic does not exist with topic name - {}", topicName);
+            throw new EventDeliveryException("Topic does not exist.", Response.Status.BAD_REQUEST.getStatusCode());
+        }
+        List<Document> documents = mongoDAO.findByKey(collection, USER_ID, userId);
+        if(CollectionUtils.isEmpty(documents)){
+            logger.error("Event with userId {} does not exist.", userId);
+            throw new EventDeliveryException("Event with userId does not exist.", Response.Status.BAD_REQUEST.getStatusCode());
+        }
+        return objectMapper.convertValue(documents.get(0), Event.class);
+    }
 
     public Event insertOne(EventRequest eventRequest, String collectionName){
         Event event = getEventPojo(eventRequest, collectionName);
         Document document = objectMapper.convertValue(event, Document.class);
         mongoDAO.insertOne(mongoDatabase.getCollection(collectionName), document);
+        observable.notifyObservers(event.getId(), collectionName);
         return event;
     }
 
