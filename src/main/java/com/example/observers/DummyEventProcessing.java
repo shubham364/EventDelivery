@@ -1,5 +1,6 @@
 package com.example.observers;
 
+import com.example.Service.BackOffRetryService;
 import com.example.Service.EventService;
 import com.example.dao.MongoDAO;
 import com.example.model.Consumers;
@@ -48,27 +49,48 @@ public class DummyEventProcessing implements Callable {
         return null;
     }
 
-    // TODO - Handle failures and retries
     private void startMockingEventProcessing(String eventId){
         Event event = eventService.getEventById(eventId, consumer.getTopicName());
         if(event == null)
             return;
         Random rand = new Random(10000);
         int random = rand.nextInt();
-        try {
-            // sleeping for a random time between [0, 10) seconds mocking event processing.
-            Thread.sleep(random);
-        } catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
-        handlePostProcessing(eventId);
+        processEventsWithFailure(random, eventId);
+        handlePostProcessing(eventId, consumer.getCurrRetry());
         int nextEventId = Integer.parseInt(eventId) + 1;
         startMockingEventProcessing(String.valueOf(nextEventId));
     }
 
-    private void handlePostProcessing(String eventId){
+    private void processEventsWithFailure(int randomSleepTime, String eventId){
+        Random rand = new Random(10);
+        int random = rand.nextInt();
+
+        // Randomly failing 30% of the events.
+        if(random < 3){
+            logger.error("Processing failed for eventId - {} for Consumer - {} with retry count - {}.", eventId, consumer.getConsumerId(), consumer.getCurrRetry());
+            if(consumer.getCurrRetry() <= consumer.getMaxRetry()){
+                handlePostProcessing(eventId, consumer.getCurrRetry() + 1);
+                BackOffRetryService.waitUntilNextRetry(consumer.getCurrRetry(), consumer.getConsumerId());
+                processEventsWithFailure(randomSleepTime, eventId);
+            }
+            else
+                logger.error("Maximum number of retries exhausted for eventId - {} for consumer - {}. Moving to next event.", eventId, consumer.getConsumerId());
+        }
+        else {
+            try {
+                // sleeping for a random time between [0, 10) seconds mocking event processing.
+                logger.info("Starting processing of eventId - {} for Consumer - {} with retry count - {}.", eventId, consumer.getConsumerId(), consumer.getCurrRetry());
+                Thread.sleep(randomSleepTime);
+                logger.info("Completed processing of eventId - {} for Consumer - {} with retry count - {}.", eventId, consumer.getConsumerId(), consumer.getCurrRetry());
+            } catch (Exception ex){
+                logger.error(ex.getMessage());
+            }
+        }
+    }
+
+    private void handlePostProcessing(String eventId, int currRetry){
         consumer.setCursor(eventId);
-        consumer.setCurrRetry(0);
+        consumer.setCurrRetry(currRetry);
         updateConsumer(consumer);
     }
 
