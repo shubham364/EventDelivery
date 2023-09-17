@@ -23,20 +23,17 @@ public class Observer implements IObserver {
 
     private final MongoDatabase mongoDatabase;
 
-    private boolean eventBeingProcessed;
-
     @Inject
     public Observer(Consumers consumer, EventService eventService, MongoDatabase mongoDatabase, MongoDAO mongoDAO) {
         this.consumer = consumer;
         this.eventService = eventService;
         this.mongoDatabase = mongoDatabase;
         this.mongoDAO = mongoDAO;
-        eventBeingProcessed = false;
     }
 
     @Override
     public boolean isProcessingEvent() {
-        return eventBeingProcessed;
+        return consumer.isProcessingEvent();
     }
 
     @Override
@@ -45,14 +42,14 @@ public class Observer implements IObserver {
     }
 
     @Override
-    public void relayEvent(String eventId) {
-        eventBeingProcessed = true;
+    public synchronized void relayEvent(String eventId) {
+        consumer.setProcessingEvent(true);
         startProcessingEvent(eventId);
     }
 
     @Override
-    public void restartEventProcessing() {
-        eventBeingProcessed = true;
+    public synchronized void restartEventProcessing() {
+        consumer.setProcessingEvent(true);
         startProcessingEvent(consumer.getCursor());
     }
 
@@ -64,11 +61,10 @@ public class Observer implements IObserver {
     private void startProcessingEvent(String eventId){
         Event event = eventService.getEventById(eventId, consumer.getTopicName());
         if(event == null) {
-            eventBeingProcessed = false;
+            consumer.setProcessingEvent(false);
             return;
         }
         Thread thread = new Thread(new DummyEventProcessing(event, eventService, mongoDatabase, mongoDAO, consumer));
         thread.start();
-        eventBeingProcessed = false;
     }
 }

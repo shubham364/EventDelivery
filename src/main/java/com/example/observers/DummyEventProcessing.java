@@ -55,8 +55,11 @@ public class DummyEventProcessing implements Runnable {
 
     private void startMockingEventProcessing(String eventId){
         Event event = eventService.getEventById(eventId, consumer.getTopicName());
-        if(event == null)
+        handlePreProcessing();
+        if(event == null) {
+            handlePostProcessingOfAllEvents();
             return;
+        }
         Random rand = new Random();
         int random = rand.nextInt(10000);
         processEventsWithFailure(random, eventId);
@@ -68,8 +71,6 @@ public class DummyEventProcessing implements Runnable {
     private void processEventsWithFailure(int randomSleepTime, String eventId){
         Random rand = new Random();
         int random = rand.nextInt(10);
-
-        logger.info(String.valueOf(random));
 
         // Randomly failing 30% of the events.
         if(random < 3){
@@ -86,6 +87,7 @@ public class DummyEventProcessing implements Runnable {
             try {
                 // sleeping for a random time between [0, 10) seconds mocking event processing.
                 logger.info("Starting processing of eventId - {} for Consumer - {} with retry count - {}.", eventId, consumer.getConsumerId(), consumer.getCurrRetry());
+                logger.info("Processing will take {} milliseconds.", randomSleepTime);
                 Thread.sleep(randomSleepTime);
                 logger.info("Completed processing of eventId - {} for Consumer - {} with retry count - {}.", eventId, consumer.getConsumerId(), consumer.getCurrRetry());
             } catch (Exception ex){
@@ -97,6 +99,16 @@ public class DummyEventProcessing implements Runnable {
     private void handlePostProcessing(String eventId, int currRetry){
         consumer.setCursor(eventId);
         consumer.setCurrRetry(currRetry);
+        updateConsumer(consumer);
+    }
+
+    private void handlePreProcessing(){
+        consumer.setProcessingEvent(true);
+        updateConsumer(consumer);
+    }
+
+    private void handlePostProcessingOfAllEvents(){
+        consumer.setProcessingEvent(false);
         updateConsumer(consumer);
     }
 

@@ -15,6 +15,8 @@ public class Consumers {
 
     private int currRetry;
 
+    private boolean processingEvent;
+
     public String getConsumerId() {
         return consumerId;
     }
@@ -55,6 +57,14 @@ public class Consumers {
         this.currRetry = currRetry;
     }
 
+    public boolean isProcessingEvent() {
+        return processingEvent;
+    }
+
+    public void setProcessingEvent(boolean processingEvent) {
+        this.processingEvent = processingEvent;
+    }
+
     @Override
     public String toString() {
         return "Consumers{" +
@@ -63,6 +73,7 @@ public class Consumers {
                 ", cursor='" + cursor + '\'' +
                 ", maxRetry=" + maxRetry +
                 ", currRetry=" + currRetry +
+                ", processingEvent=" + processingEvent +
                 '}';
     }
 }
