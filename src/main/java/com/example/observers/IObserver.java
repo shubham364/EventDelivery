@@ -10,4 +10,6 @@ public interface IObserver {
 
     void restartEventProcessing();
 
+    String getIdentifier();
+
 }

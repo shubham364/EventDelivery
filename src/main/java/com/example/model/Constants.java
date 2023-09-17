@@ -12,4 +12,6 @@ public class Constants {
 
     public static final String USER_ID = "userId";
 
+    public static final String X_TRACE_ID = "x-trace-id";
+
 }

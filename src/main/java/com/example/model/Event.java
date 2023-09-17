@@ -34,4 +34,13 @@ public class Event {
     public void setPayload(String payload) {
         this.payload = payload;
     }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", payload='" + payload + '\'' +
+                '}';
+    }
 }

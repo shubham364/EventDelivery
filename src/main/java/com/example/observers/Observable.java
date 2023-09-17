@@ -27,10 +27,12 @@ public class Observable {
         if(observers == null){
             observers = new ArrayList<>();
         }
+        logger.info("Adding a new Observer - {}.", observer.getIdentifier());
         observers.add(observer);
     }
 
     public void restartEventProcessing(IObserver observer){
+        logger.info("Restarting Event processing for - {}.", observer.getIdentifier());
         observer.restartEventProcessing();
     }
 

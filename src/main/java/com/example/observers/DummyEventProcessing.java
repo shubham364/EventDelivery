@@ -11,13 +11,15 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.util.Random;
-import java.util.concurrent.Callable;
+import java.util.UUID;
 
 import static com.example.model.Constants.CONSUMER_COLLECTION_NAME;
+import static com.example.model.Constants.X_TRACE_ID;
 
-public class DummyEventProcessing implements Callable {
+public class DummyEventProcessing implements Runnable {
 
     private final static Logger logger = LoggerFactory.getLogger(DummyEventProcessing.class);
 
@@ -44,31 +46,35 @@ public class DummyEventProcessing implements Callable {
     }
 
     @Override
-    public Object call() {
+    public void run() {
+        String traceId = UUID.randomUUID().toString();
+        traceId = traceId.substring(0, 13);
+        MDC.put(X_TRACE_ID, traceId);
         startMockingEventProcessing(event.getId());
-        return null;
     }
 
     private void startMockingEventProcessing(String eventId){
         Event event = eventService.getEventById(eventId, consumer.getTopicName());
         if(event == null)
             return;
-        Random rand = new Random(10000);
-        int random = rand.nextInt();
+        Random rand = new Random();
+        int random = rand.nextInt(10000);
         processEventsWithFailure(random, eventId);
-        handlePostProcessing(eventId, consumer.getCurrRetry());
+        handlePostProcessing(eventId, 0);
         int nextEventId = Integer.parseInt(eventId) + 1;
         startMockingEventProcessing(String.valueOf(nextEventId));
     }
 
     private void processEventsWithFailure(int randomSleepTime, String eventId){
-        Random rand = new Random(10);
-        int random = rand.nextInt();
+        Random rand = new Random();
+        int random = rand.nextInt(10);
+
+        logger.info(String.valueOf(random));
 
         // Randomly failing 30% of the events.
         if(random < 3){
             logger.error("Processing failed for eventId - {} for Consumer - {} with retry count - {}.", eventId, consumer.getConsumerId(), consumer.getCurrRetry());
-            if(consumer.getCurrRetry() <= consumer.getMaxRetry()){
+            if(consumer.getCurrRetry() < consumer.getMaxRetry()){
                 handlePostProcessing(eventId, consumer.getCurrRetry() + 1);
                 BackOffRetryService.waitUntilNextRetry(consumer.getCurrRetry(), consumer.getConsumerId());
                 processEventsWithFailure(randomSleepTime, eventId);

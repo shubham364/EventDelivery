@@ -29,8 +29,8 @@ public class EventResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getEvent(@PathParam(value = "topic_name") String topicName, @PathParam(value = "user_id") String userId) throws EventDeliveryException {
-        logger.info("Hello");
         Event event = eventService.getEvent(topicName, userId);
+        logger.info(event.toString());
         return Response.ok(event).build();
     }
 
@@ -41,7 +41,8 @@ public class EventResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response publish(@QueryParam(value = "topic_name") @DefaultValue("rudderstack") String topicName,
                             EventRequest eventRequest) {
-        Event event = eventService.insertOne(eventRequest, topicName);
+        Event event = eventService.publish(eventRequest, topicName);
+        logger.info("Published event - {}", event);
         return Response.ok(event).build();
     }
 
@@ -52,6 +53,7 @@ public class EventResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createTopic(@PathParam(value = "topic_name") String topicName) {
         eventService.createCollection(topicName);
+        logger.info("Created a new topic - {}", topicName);
         return Response.ok(topicName).build();
     }
 

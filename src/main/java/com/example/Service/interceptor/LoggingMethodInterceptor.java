@@ -6,9 +6,9 @@ import org.slf4j.MDC;
 
 import java.util.UUID;
 
-public class LoggingMethodInterceptor implements MethodInterceptor {
+import static com.example.model.Constants.X_TRACE_ID;
 
-    private static final String X_TRACE_ID = "x-trace-id";
+public class LoggingMethodInterceptor implements MethodInterceptor {
 
     @Override
     public Object invoke(MethodInvocation methodInvocation) throws Throwable {

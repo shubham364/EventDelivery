@@ -55,7 +55,7 @@ public class EventService {
         return objectMapper.convertValue(documents.get(0), Event.class);
     }
 
-    public Event insertOne(EventRequest eventRequest, String collectionName){
+    public Event publish(EventRequest eventRequest, String collectionName){
         Event event = getEventPojo(eventRequest, collectionName);
         Document document = objectMapper.convertValue(event, Document.class);
         mongoDAO.insertOne(mongoDatabase.getCollection(collectionName), document);

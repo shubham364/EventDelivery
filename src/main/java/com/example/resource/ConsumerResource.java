@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -30,6 +31,7 @@ public class ConsumerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getConsumer(@PathParam(value = "consumer_name") String consumerName) throws EventDeliveryException {
         Consumers consumer = consumerService.getConsumer(consumerName);
+        logger.info(consumer.toString());
         return Response.ok(consumer).build();
     }
 
@@ -38,8 +40,9 @@ public class ConsumerResource {
     @TraceId
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createConsumer(CreateConsumerRequest request) {
+    public Response createConsumer(@Valid CreateConsumerRequest request) {
         Consumers consumer = consumerService.createConsumer(request);
+        logger.info("Created a new consumer - {}", consumer);
         return Response.ok(consumer).build();
     }
 }

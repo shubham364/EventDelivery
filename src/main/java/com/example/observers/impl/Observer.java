@@ -56,11 +56,18 @@ public class Observer implements IObserver {
         startProcessingEvent(consumer.getCursor());
     }
 
+    @Override
+    public String getIdentifier() {
+        return consumer.toString();
+    }
+
     private void startProcessingEvent(String eventId){
         Event event = eventService.getEventById(eventId, consumer.getTopicName());
-        if(event == null)
+        if(event == null) {
+            eventBeingProcessed = false;
             return;
-        Thread thread = new Thread(() -> new DummyEventProcessing(event, eventService, mongoDatabase, mongoDAO, consumer));
+        }
+        Thread thread = new Thread(new DummyEventProcessing(event, eventService, mongoDatabase, mongoDAO, consumer));
         thread.start();
         eventBeingProcessed = false;
     }
