@@ -1,0 +1,5 @@
+{
+  "consumer_name": "consumer2",
+  "topic_name": "topics",
+  "max_retry": 4
+}

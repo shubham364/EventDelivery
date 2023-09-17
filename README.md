@@ -18,6 +18,10 @@ Functionalities :-
    * I relay the message to the consumers using **Observer Design Pattern**. To mock the processing of events I have created 
    a DummyEventProcessing class that works on a new thread for each Observer. Even if an event is failing for one observer, all the other observers 
    are unaware of this, and they continue their own processing.
+6. Logging
+   * I have used logback and [MDC](https://logback.qos.ch/manual/mdc.html) for logging. Each request will have its own unique traceId that is useful for 
+   debugging any issues. It is useful in a multithreaded application to find logs for a particular event. It is implemented 
+   using [methodInterceptors](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/aopalliance/intercept/MethodInterceptor.html) in java.
 
 APIs :-
 - Event Resource
@@ -27,7 +31,7 @@ APIs :-
    * Payload :-
    ```json
    {
-    "userId": "",
+    "user_id": "",
     "payload": ""
    }
    ```
@@ -87,3 +91,8 @@ APIs :-
     "_id": "consumer2"
    }
    ```
+   
+**How to run** :-
+1. You should have maven and java installed in your laptop.
+2. Run the command ``mvn clean install`` in the base directory. This step will create the jar inside target directory.
+3. Run the command `` java -jar target/EventDelivery-1.0-SNAPSHOT.jar -server config.yaml``

@@ -74,8 +74,10 @@ public class EventService {
     private synchronized String generateId(String collectionName){
         if(ID == 0){
             Document document = mongoDAO.getLatestDoc(mongoDatabase.getCollection(collectionName));
-            Event event = objectMapper.convertValue(document, Event.class);
-            ID = Integer.parseInt(event.getId());
+            if(document != null) {
+                Event event = objectMapper.convertValue(document, Event.class);
+                ID = Integer.parseInt(event.getId());
+            }
         }
         ID += 1;
         return ID.toString();

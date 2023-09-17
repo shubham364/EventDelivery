@@ -3,6 +3,7 @@ package com.example.dao;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import org.apache.commons.collections4.CollectionUtils;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,10 @@ public class MongoDAO {
 
     public Document getLatestDoc(MongoCollection<Document> collection){
         List<Document> docs = collection.find().sort(descending("$natural")).limit(1).into(new ArrayList<>());
+        if(CollectionUtils.isEmpty(docs)){
+            logger.info("No Documents in this collection.");
+            return null;
+        }
         return docs.get(0);
     }
 

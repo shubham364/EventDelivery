@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -40,7 +41,7 @@ public class EventResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response publish(@QueryParam(value = "topic_name") @DefaultValue("rudderstack") String topicName,
-                            EventRequest eventRequest) {
+                            @Valid EventRequest eventRequest) {
         Event event = eventService.publish(eventRequest, topicName);
         logger.info("Published event - {}", event);
         return Response.ok(event).build();
