@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.config.EventDeliveryConfiguration;
 import com.example.dao.InitialiseObservers;
+import com.example.dao.MongoHealthCheck;
 import com.example.exception.EventDeliveryExceptionMapper;
 import com.example.guice.GuiceModule;
 import com.example.resource.ConsumerResource;
@@ -25,6 +26,7 @@ public class EventDeliveryApplication extends Application<EventDeliveryConfigura
         env.jersey().register(injector.getInstance(EventDeliveryExceptionMapper.class));
         env.jersey().register(injector.getInstance(EventResource.class));
         env.jersey().register(injector.getInstance(ConsumerResource.class));
+        env.healthChecks().register("mongodb-health", injector.getInstance(MongoHealthCheck.class));
     }
 
     @Override

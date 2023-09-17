@@ -94,5 +94,5 @@ APIs :-
    
 **How to run** :-
 1. You should have maven and java installed in your laptop.
-2. Run the command ``mvn clean install`` in the base directory. This step will create the jar inside target directory.
-3. Run the command `` java -jar target/EventDelivery-1.0-SNAPSHOT.jar -server config.yaml``
+2. Run the command ``mvn clean package`` in the base directory. This step will create the jar inside target directory.
+3. Run the command ``java -jar target/EventDelivery-1.0-SNAPSHOT.jar server config.yaml``
