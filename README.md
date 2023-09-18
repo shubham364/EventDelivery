@@ -25,74 +25,75 @@ Functionalities :-
 
 APIs :-
 - Event Resource
-1. /event/publish?topic_name=''
-   * This API is used to publish event in a topic. The topic_name is an optional query parameter. If not provided the events will go into a default topic.
+  1. /event/publish?topic_name=''
+     * This API is used to publish event in a topic. The topic_name is an optional query parameter. If not provided the events will go into a default topic.
    
-   * Payload :-
-   ```json
-   {
-    "user_id": "",
-    "payload": ""
-   }
-   ```
-   * Response :-
-   ```json
-   {
-    "userId": "",
-    "payload": "",
-    "_id": "1"
-   }
-   ```
-2. /event/get/{topic_name}/{user_id}
-   * This API is used to get the event from a topic based on user_id.
-   * Response :-
-   ```json
-   {
-    "userId": "",
-    "payload": "",
-    "_id": "1"
-   }
-   ```
-3. /event/create_topic/{topic_name}
-   * This API is used to create a new topic.
+     * Payload :-
+     ```json
+     {
+      "user_id": "",
+      "payload": ""
+     }
+     ```
+     * Response :-
+     ```json
+     {
+      "userId": "",
+      "payload": "",
+      "_id": "1"
+     }
+     ```
+  2. /event/get/{topic_name}/{user_id}
+     * This API is used to get the event from a topic based on user_id.
+     * Response :-
+     ```json
+     {
+      "userId": "",
+      "payload": "",
+      "_id": "1"
+     }
+     ```
+  3. /event/create_topic/{topic_name}
+     * This API is used to create a new topic.
 
 - Consumer Resource
-1. /consumer/get/{consumer_name}
-   * This API is used to get Consumer info.
-   * Response :-
-   ```json
-   {
-    "topicName": "topics",
-    "cursor": "54",
-    "maxRetry": 3,
-    "currRetry": 0,
-    "processingEvent": false,
-    "_id": "consumer1"
-   }
-   ```
-2. /consumer/create
-   * This API is used to create a new consumer that will receive the event pushed into the topic it has subscribed to.
-   * Payload :-
-   ```json
-   {
-    "consumer_name": "consumer2",
-    "topic_name": "topics",
-    "max_Retry": 5
-   }
-   ```
-   * Response :-
-   ```json
-   {
-    "topicName": "topics",
-    "cursor": "0",
-    "maxRetry": 5,
-    "currRetry": 0,
-    "processingEvent": false,
-    "_id": "consumer2"
-   }
-   ```
+  1. /consumer/get/{consumer_name}
+     * This API is used to get Consumer info.
+     * Response :-
+     ```json
+     {
+      "topicName": "topics",
+      "cursor": "54",
+      "maxRetry": 3,
+      "currRetry": 0,
+      "processingEvent": false,
+      "_id": "consumer1"
+     }
+     ```
+  2. /consumer/create
+     * This API is used to create a new consumer that will receive the event pushed into the topic it has subscribed to.
+     * Payload :-
+     ```json
+     {
+      "consumer_name": "consumer2",
+      "topic_name": "topics",
+      "max_Retry": 5
+     }
+     ```
+     * Response :-
+     ```json
+     {
+      "topicName": "topics",
+      "cursor": "0",
+      "maxRetry": 5,
+      "currRetry": 0,
+      "processingEvent": false,
+      "_id": "consumer2"
+     }
+     ```
    
 **How to run** :-
-1. You should have maven and java installed in your laptop.
+1. You should have maven, MongoDB and java installed in your laptop.
 2. Run the command ``mvn clean package`` in the base directory. This step will create the jar inside target directory.
 3. Run the command ``java -jar target/EventDelivery-1.0-SNAPSHOT.jar server config.yaml``
+4. Make sure mongoDb is running on port ``27017`` 
