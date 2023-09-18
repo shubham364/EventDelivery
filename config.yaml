@@ -1,0 +1,14 @@
+server:
+  requestLog:
+    type: external
+logging:
+  type: external
+
+mongoConfig:
+  mongoHost : localhost
+  mongoPort : 27017
+  mongoDB : topics
+
+
+
+
